@@ -5,13 +5,6 @@ const mysql = require('mysql2');
 const { database } = require('./keys');
 const PUERTO = 4300;
 const app = express();
-const conexion = mysql.createConnection({
-    host: database.host,
-    user: database.user,
-    password: database.password,
-    port: database.port,
-    database: database.database
-});
 const { google } = require('googleapis');
 const auth = new google.auth.GoogleAuth({
     keyFile: 'credentials.json',
@@ -22,6 +15,13 @@ const spreadsheetId = process.env.SPREADSHEET_ID;
 app.use(morgan('dev'));
 
 app.get('/', async (req, res) => {
+    const conexion = mysql.createConnection({
+        host: database.host,
+        user: database.user,
+        password: database.password,
+        port: database.port,
+        database: database.database
+    });
     const client = await auth.getClient();
     const googleSheet = google.sheets({ version: 'v4', auth: client });
     try {
