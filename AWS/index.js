@@ -129,7 +129,7 @@ exports.handler = async function (event) {
             await finalizarEjecucion();
         };
         async function finalizarEjecucion() {
-            conexion.end()
+            conexion.end();
         }
     });
     return promise;
