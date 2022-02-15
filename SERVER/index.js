@@ -73,60 +73,64 @@ app.get('/', async (req, res) => {
     }
     async function trasladarIncomeStatement(resultado){
         try {
+            await googleSheet.spreadsheets.values.clear({
+                auth,
+                spreadsheetId,
+                range: `${process.env.ID_HOJA_RANGO}`
+            })
+            var datos = [];
             for (let i = 0; i < resultado.length; i++) {
-                var datos = [
-                    [
-                        resultado[i].date,
-                        resultado[i].symbol,
-                        resultado[i].cik,
-                        resultado[i].reportedCurrency,
-                        resultado[i].fillingDate,
-                        resultado[i].acceptedDate,
-                        resultado[i].calendarYear,
-                        resultado[i].period,
-                        resultado[i].revenue,
-                        resultado[i].costOfRevenue,
-                        resultado[i].grossProfit,
-                        resultado[i].grossProfitRatio,
-                        resultado[i].researchAndDevelopmentExpenses,
-                        resultado[i].generalAndAdministrativeExpenses,
-                        resultado[i].sellingAndMarketingExpenses,
-                        resultado[i].sellingGeneralAndAdministrativeExpenses,
-                        resultado[i].otherExpenses,
-                        resultado[i].operatingExpenses,
-                        resultado[i].costAndExpenses,
-                        resultado[i].interestIncome,
-                        resultado[i].interestExpense,
-                        resultado[i].depreciationAndAmortization,
-                        resultado[i].ebitda,
-                        resultado[i].ebitdaratio,
-                        resultado[i].operatingIncome,
-                        resultado[i].operatingIncomeRatio,
-                        resultado[i].totalOtherIncomeExpensesNet,
-                        resultado[i].incomeBeforeTax,
-                        resultado[i].incomeBeforeTaxRatio,
-                        resultado[i].incomeTaxExpense,
-                        resultado[i].netIncome,
-                        resultado[i].netIncomeRatio,
-                        resultado[i].eps,
-                        resultado[i].epsdiluted,
-                        resultado[i].weightedAverageShsOut,
-                        resultado[i].weightedAverageShsOutDil,
-                        resultado[i].link,
-                        resultado[i].finalLink
-                    ]
-                ]
-                await googleSheet.spreadsheets.values.append({
-                    auth,
-                    spreadsheetId,
-                    range: `${process.env.ID_HOJA_RANGO}`,
-                    valueInputOption: "USER_ENTERED",
-                    requestBody: {
-                        "range": `${process.env.ID_HOJA_RANGO}`,
-                        "values": datos
-                    }
-                });
+                datos.push([
+                    resultado[i].date,
+                    resultado[i].symbol,
+                    resultado[i].cik,
+                    resultado[i].reportedCurrency,
+                    resultado[i].fillingDate,
+                    resultado[i].acceptedDate,
+                    resultado[i].calendarYear,
+                    resultado[i].period,
+                    resultado[i].revenue,
+                    resultado[i].costOfRevenue,
+                    resultado[i].grossProfit,
+                    resultado[i].grossProfitRatio,
+                    resultado[i].researchAndDevelopmentExpenses,
+                    resultado[i].generalAndAdministrativeExpenses,
+                    resultado[i].sellingAndMarketingExpenses,
+                    resultado[i].sellingGeneralAndAdministrativeExpenses,
+                    resultado[i].otherExpenses,
+                    resultado[i].operatingExpenses,
+                    resultado[i].costAndExpenses,
+                    resultado[i].interestIncome,
+                    resultado[i].interestExpense,
+                    resultado[i].depreciationAndAmortization,
+                    resultado[i].ebitda,
+                    resultado[i].ebitdaratio,
+                    resultado[i].operatingIncome,
+                    resultado[i].operatingIncomeRatio,
+                    resultado[i].totalOtherIncomeExpensesNet,
+                    resultado[i].incomeBeforeTax,
+                    resultado[i].incomeBeforeTaxRatio,
+                    resultado[i].incomeTaxExpense,
+                    resultado[i].netIncome,
+                    resultado[i].netIncomeRatio,
+                    resultado[i].eps,
+                    resultado[i].epsdiluted,
+                    resultado[i].weightedAverageShsOut,
+                    resultado[i].weightedAverageShsOutDil,
+                    resultado[i].link,
+                    resultado[i].finalLink
+                ]);
             }
+            await googleSheet.spreadsheets.values.append({
+                auth,
+                spreadsheetId,
+                range: `${process.env.ID_HOJA_RANGO}`,
+                valueInputOption: "USER_ENTERED",
+                requestBody: {
+                    "range": `${process.env.ID_HOJA_RANGO}`,
+                    "values": datos
+                }
+            });
             console.log('Datos agregados correctamente.');
         } catch (error) {
             console.error(error);
