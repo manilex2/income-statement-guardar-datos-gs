@@ -21,9 +21,9 @@ exports.handler = async function (event) {
         const googleSheet = google.sheets({ version: 'v4', auth: client });
         try {
             var sql = `SELECT date,
-            symbol, 
+            symbol,
+            reportedCurrency, 
             cik,
-            reportedCurrency,
             fillingDate,
             acceptedDate,
             calendarYear,
@@ -78,8 +78,8 @@ exports.handler = async function (event) {
                     datos.push([
                         resultado[i].date,
                         resultado[i].symbol,
-                        resultado[i].cik,
                         resultado[i].reportedCurrency,
+                        resultado[i].cik,
                         resultado[i].fillingDate,
                         resultado[i].acceptedDate,
                         resultado[i].calendarYear,
